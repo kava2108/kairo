@@ -1,7 +1,7 @@
 ---
 description: >
   プロダクトの説明から UI/UX デザインシステムを自動生成します。
-  ui-ux-pro-max-skill（UUPM）の推論エンジンを使用し、
+  Claude ネイティブの UUPM 推論エンジンを使用し、
   スタイル・カラー・タイポグラフィ・レイアウトパターンを決定します。
   生成した design-system/MASTER.md は CEG ノードとして管理されます。
 allowed-tools: Read, Write, Bash, AskUserQuestion, TodoWrite, Glob, Grep, Edit
@@ -13,8 +13,8 @@ argument-hint: "<product-description> [--stack <stack>] [--page <page-name>] [--
 ## 目的
 
 プロダクトの自然言語説明から UI/UX デザインシステムを生成し、`design-system/MASTER.md`
-として永続化する。UUPM（ui-ux-pro-max-skill）推論エンジンを使用して業界固有の
-デザインパターンを選択し、kairo CEG（Conditioned Evidence Graph）の TDS フェーズノードとして統合する。
+として永続化する。UUPM（ui-ux-pro-max-skill）の設計思想を Claude ネイティブ推論として内部化し、
+業界固有のデザインパターンを選択する。kairo CEG（Conditioned Evidence Graph）の TDS フェーズノードとして統合する。
 
 ---
 
@@ -28,8 +28,6 @@ FEATURE=（--feature オプション。未指定時は "main" を使用）
 NO_UUPM=（--no-uupm フラグ。指定時は UUPM をスキップして手動設計モードに移行）
 PERSIST=（--persist フラグ。既存 MASTER.md がある場合も上書き）
 
-UUPM_SKILL_PATH=.claude/skills/ui-ux-pro-max
-UUPM_SEARCH_SCRIPT=.claude/skills/ui-ux-pro-max/scripts/search.py
 MASTER_MD=design-system/MASTER.md
 COHERENCE_JSON=graph/coherence.json
 ```
@@ -46,37 +44,25 @@ COHERENCE_JSON=graph/coherence.json
 
 ---
 
-# step2: UUPM 推論エンジン呼び出し
+# step2: UUPM 推論（Claude ネイティブ）
 
-## step2a: UUPM スキル確認
+> **v1.1 方針**: 外部 Python スクリプトは使用しない。
+> Claude 自身が UUPM 設計思想に基づいて推論する。
 
-`$UUPM_SEARCH_SCRIPT` の存在を Bash で確認する:
+`--no-uupm` フラグが指定されている場合はこのステップをスキップしてステップ3へ進む。
 
-```bash
-[ -f "$UUPM_SEARCH_SCRIPT" ] && echo "UUPM_OK" || echo "UUPM_MISSING"
-```
+## step2a: 業界カテゴリ特定
 
-- `UUPM_MISSING` の場合:
-  - `/kairo:install --skip-harness` を実行するよう案内し、一時的に手動設計モードへ移行する。
-  - 手動設計モード: ステップ2bをスキップしてステップ3に進み、プレースホルダーを含む
-    MASTER.md を生成する（`# TODO: /kairo:design-system を再実行して UUPM 推論を適用`）。
-- `--no-uupm` フラグが指定されている場合: ステップ2bをスキップ。
+`$PRODUCT_DESC` と `$STACK_ARG` を元に、以下の 10 大業界分類からカテゴリを判定する:
+
+Tech/SaaS / Finance / Healthcare / E-commerce / Services / Creative /
+Lifestyle / Education / Community / Emerging
+
+判定結果と「ユーザーの感情的期待（信頼感・革新性・安心感 など）」を出力する。
 
 ## step2b: UUPM 推論実行
 
-以下のコマンドを Bash で実行する:
-
-```bash
-python3 .claude/skills/ui-ux-pro-max/scripts/search.py \
-  "$PRODUCT_DESC" \
-  --design-system \
-  -p "$FEATURE" \
-  -f markdown \
-  --stack "$STACK_ARG"
-```
-
-取得した推論結果（スタイル候補・カラーパレット・タイポグラフィ・業界規則）を
-以下の構造にパースして整理する:
+特定した業界カテゴリを踏まえ、以下の 5 次元を同時に推論して整理する:
 - **Style Recommendations**: 推奨スタイル名と使用理由
 - **Color Palette**: Primary / Secondary / Accent / Neutral / Semantic カラー
 - **Typography**: フォントペア（見出し用 + 本文用）・フォントサイズスケール
