@@ -1,7 +1,7 @@
 ---
-description: EARS 形式の要件定義書（requirements.md）を生成します。Steering 文書とフィーチャー説明をもとに受け入れ基準を構造化します。
+description: EARS 形式の要件定義書（requirements.md）を生成します。--suggest でフィーチャー候補一覧を提示し承認後に .kiro/specs/<feature>/ を一括作成します。
 allowed-tools: Read, Glob, Write, Edit, AskUserQuestion, TodoWrite
-argument-hint: "<feature-name> [-y]"
+argument-hint: "<feature-name> [--suggest] [-y]"
 ---
 
 # kairo spec-req
@@ -9,9 +9,13 @@ argument-hint: "<feature-name> [-y]"
 EARS（Easy Approach to Requirements Syntax）形式の要件定義書を生成します。
 受け入れ基準に一意の `REQ-NNN-AC-MM` ID を付与し、後続の設計・テスト・drift_check とのトレーサビリティを確保します。
 
+`--suggest` モードでは、プロダクト/コードベースの分析からフィーチャー候補一覧を提示し、
+承認されたフィーチャーの `.kiro/specs/<feature>/` ディレクトリを一括作成します。
+
 # context
 
 feature_name={{feature_name}}
+suggest_mode={{suggest_mode}}
 auto_approve={{auto_approve}}
 spec_dir=.kiro/specs/{{feature_name}}
 requirements_file=.kiro/specs/{{feature_name}}/requirements.md
@@ -21,10 +25,114 @@ spec_json=.kiro/specs/{{feature_name}}/spec.json
 
 - $ARGUMENTS がない場合は「引数に feature-name を指定してください（例: /kairo:spec-req user-auth-oauth）」と言って終了する
 - $ARGUMENTS を解析する：
+  - `--suggest` フラグを確認し suggest_mode に設定（デフォルト: false）
   - `-y` フラグを確認し auto_approve に設定（デフォルト: false）
-  - 最初のトークンを feature_name に設定
+  - 最初のトークン（フラグ以外）を feature_name に設定
+- `--suggest` フラグが有効な場合は suggest-step へジャンプする
 - context の内容をユーザーに宣言する
 - step2 を実行する
+
+## suggest-step: フィーチャー候補の提示と一括ディレクトリ作成
+
+### suggest-step1: コンテキスト収集
+
+- `.kiro/steering/product.md` を存在する場合に Read する
+- `.kiro/steering/structure.md` を存在する場合に Read する
+- `README.md`, `KAIRO.md`, `CLAUDE.md` を存在する場合に Read する
+- Glob で `src/**`, `app/**`, `lib/**` の構造を把握する
+- 既存の `.kiro/specs/` ディレクトリ一覧を確認し、既に作成済みのフィーチャーを把握する
+
+### suggest-step2: フィーチャー候補の生成
+
+コードベース・プロダクト情報の分析から、実装が必要と推論されるフィーチャー候補を生成する：
+
+- 候補は 5〜10 件を目安とし、kebab-case の feature-name と説明を付ける
+- 既に `.kiro/specs/` に存在するフィーチャーは「✅ 作成済み」として一覧に含める（再作成しない）
+- 依存関係がある場合は「依存: <feature-name>」を付記する
+
+提示形式：
+
+```
+【フィーチャー候補一覧】
+
+新規作成候補:
+  1. user-auth-oauth        — OAuth 2.0 / JWT 認証基盤
+  2. product-catalog-api    — 商品カタログ CRUD API
+  3. payment-integration    — 決済処理統合（Stripe）
+  4. notification-service   — メール/Push 通知サービス（依存: user-auth-oauth）
+  5. admin-dashboard        — 管理画面 UI
+
+作成済み:
+  ✅ onboarding-flow        — ユーザーオンボーディング
+```
+
+### suggest-step3: Human Gate — フィーチャー選択
+
+AskUserQuestion ツールで確認する：
+- question: "作成するフィーチャーを選択してください（複数選択可）"
+- header: "フィーチャー選択"
+- multiSelect: true
+- options: 候補一覧の各フィーチャーを option として列挙する（label: "<feature-name> — <説明>"）
+- 「全て選択」「選択をクリア」オプションも加える
+- allowFreeformInput: true（一覧にないフィーチャーも追加入力可能）
+
+### suggest-step4: ディレクトリの一括作成
+
+選択されたフィーチャーそれぞれに対して以下を実行する（既存ディレクトリはスキップ）：
+
+1. `.kiro/specs/<feature-name>/` ディレクトリを作成する
+2. `spec.json` を以下の内容で Write する：
+   ```json
+   {
+     "feature": "<feature-name>",
+     "description": "<説明>",
+     "status": "init",
+     "phases": {
+       "steering": "<.kiro/steering/ が存在すれば 'available' でなければ 'skipped'>",
+       "requirements": "pending",
+       "design": "pending",
+       "tasks": "pending",
+       "issues_generated": false
+     },
+     "generated_issues": [],
+     "wave_config": {},
+     "created_at": "<現在の ISO8601 日時>",
+     "updated_at": "<現在の ISO8601 日時>"
+   }
+   ```
+3. `requirements.md` を以下のスタブで Write する：
+   ```markdown
+   # Requirements Document: <feature-name>
+
+   > **ステータス**: draft（`/kairo:spec-req <feature-name>` で詳細を生成）
+
+   ## Introduction
+   <説明>
+
+   ## Requirements
+   （`/kairo:spec-req <feature-name>` で自動生成されます）
+   ```
+
+### suggest-step5: 完了通知
+
+作成したディレクトリ一覧を表示する：
+
+```
+✅ フィーチャーワークスペースを一括作成しました
+
+.kiro/specs/
+├── user-auth-oauth/        ← 新規作成
+├── product-catalog-api/    ← 新規作成
+├── payment-integration/    ← 新規作成
+└── notification-service/   ← 新規作成
+
+次のステップ（各フィーチャーの要件定義を生成）:
+  /kairo:spec-req user-auth-oauth
+  /kairo:spec-req product-catalog-api
+  ...
+```
+
+終了する（ここ以降の通常フローへは進まない）。
 
 ## step2: 前提チェック
 
