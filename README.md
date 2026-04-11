@@ -72,6 +72,11 @@ gh issue create \
 ```bash
 # REQ: 要件定義
 /kairo:spec-steering
+
+# フィーチャーが未確定の場合: AI 提案から複数選択して .kiro/specs/ を一括作成
+/kairo:spec-req --suggest
+
+# フィーチャーが決まっている場合: 単体で要件定義書を生成
 /kairo:spec-req user-auth-oauth
 
 # TDS: 技術設計
@@ -115,6 +120,7 @@ gh issue create \
 |---------|------|
 | `/kairo:spec-steering [--update]` | Steering 文書（技術スタック・規約）を生成 |
 | `/kairo:spec-req <feature> [-y]` | EARS 記法の要件定義書を生成。Phase Gate REQ→TDS を実行 |
+| `/kairo:spec-req --suggest` | フィーチャー候補を AI が提案 → 選択したものの `.kiro/specs/<feature>/` を一括作成 |
 
 ### TDS フェーズ（Kiro による技術設計）
 
