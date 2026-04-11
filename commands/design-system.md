@@ -36,7 +36,7 @@ COHERENCE_JSON=graph/coherence.json
 
 # step1: コンテキスト収集
 
-1. `.kiro/steering/*.md` を Read してプロダクトコンテキスト（技術スタック・規約）を把握する。
+1. `.kairo/steering/*.md` を Read してプロダクトコンテキスト（技術スタック・規約）を把握する。
    ファイルが存在しない場合は、`$PRODUCT_DESC` と `$STACK_ARG` のみを使用する。
 2. `$MASTER_MD` の存在を確認する。
    - **存在する場合（かつ --persist 未指定）**: 差分マージモードとして既存設計を保持し追記する。

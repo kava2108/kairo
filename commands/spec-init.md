@@ -1,5 +1,5 @@
 ---
-description: フィーチャーの仕様ワークスペースを初期化します。自然言語の説明から feature-name を生成し、.kiro/specs/ にディレクトリと spec.json を作成します。
+description: フィーチャーの仕様ワークスペースを初期化します。自然言語の説明から feature-name を生成し、.kairo/specs/ にディレクトリと spec.json を作成します。
 allowed-tools: Read, Glob, Write, Bash, AskUserQuestion, TodoWrite
 argument-hint: "<feature-description>"
 ---
@@ -7,15 +7,15 @@ argument-hint: "<feature-description>"
 # kairo spec-init
 
 フィーチャーの仕様ワークスペースを初期化します。
-自然言語の説明から kebab-case の feature-name を生成し、`.kiro/specs/<feature-name>/` を作成します。
+自然言語の説明から kebab-case の feature-name を生成し、`.kairo/specs/<feature-name>/` を作成します。
 冪等設計のため、既存ワークスペースが存在する場合は確認を求めます。
 
 # context
 
 feature_description={{feature_description}}
 feature_name={{feature_name}}
-specs_dir=.kiro/specs
-steering_dir=.kiro/steering
+specs_dir=.kairo/specs
+steering_dir=.kairo/steering
 
 # step
 
@@ -26,9 +26,9 @@ steering_dir=.kiro/steering
 
 ## step2: Steering コンテキストの読み込み
 
-- `.kiro/steering/structure.md` を存在する場合に Read する
-- `.kiro/steering/tech.md` を存在する場合に Read する
-- `.kiro/steering/product.md` を存在する場合に Read する
+- `.kairo/steering/structure.md` を存在する場合に Read する
+- `.kairo/steering/tech.md` を存在する場合に Read する
+- `.kairo/steering/product.md` を存在する場合に Read する
 - Steering が存在しない場合：「Steering 文書が未生成です。先に `/kairo:spec-steering` を実行することを推奨します（スキップして続行も可能）」と表示する
 - step3 を実行する
 
@@ -48,9 +48,9 @@ steering_dir=.kiro/steering
 
 ## step4: 既存ワークスペースの確認（idempotent チェック）
 
-- `.kiro/specs/{{feature_name}}/` が既に存在するか確認する
+- `.kairo/specs/{{feature_name}}/` が既に存在するか確認する
   - 存在する場合：
-    - `.kiro/specs/{{feature_name}}/spec.json` を Read してステータスを確認する
+    - `.kairo/specs/{{feature_name}}/spec.json` を Read してステータスを確認する
     - 「既存のワークスペースが見つかりました（status: <status>）」と表示する
     - AskUserQuestion で確認する：
       - question: "続行しますか？"
@@ -62,7 +62,7 @@ steering_dir=.kiro/steering
 
 ## step5: ワークスペースの初期化
 
-- `.kiro/specs/{{feature_name}}/` ディレクトリを作成する
+- `.kairo/specs/{{feature_name}}/` ディレクトリを作成する
 - `spec.json` を以下の内容で Write する：
 
 ```json
@@ -71,7 +71,7 @@ steering_dir=.kiro/steering
   "description": "{{feature_description}}",
   "status": "init",
   "phases": {
-    "steering": "<.kiro/steering/ が存在すれば 'available' でなければ 'skipped'>",
+    "steering": "<.kairo/steering/ が存在すれば 'available' でなければ 'skipped'>",
     "requirements": "pending",
     "design": "pending",
     "tasks": "pending",
@@ -104,7 +104,7 @@ steering_dir=.kiro/steering
 ```
 ✅ フィーチャーワークスペースを初期化しました
 
-.kiro/specs/{{feature_name}}/
+.kairo/specs/{{feature_name}}/
 ├── spec.json        — フィーチャーメタデータ（status: init）
 └── requirements.md  — 要件スタブ（未生成）
 ```

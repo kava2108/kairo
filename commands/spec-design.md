@@ -14,11 +14,11 @@ Mermaid 図付きで出力します。
 
 feature_name={{feature_name}}
 auto_approve={{auto_approve}}
-spec_dir=.kiro/specs/{{feature_name}}
-requirements_file=.kiro/specs/{{feature_name}}/requirements.md
-design_file=.kiro/specs/{{feature_name}}/design.md
-research_file=.kiro/specs/{{feature_name}}/research.md
-spec_json=.kiro/specs/{{feature_name}}/spec.json
+spec_dir=.kairo/specs/{{feature_name}}
+requirements_file=.kairo/specs/{{feature_name}}/requirements.md
+design_file=.kairo/specs/{{feature_name}}/design.md
+research_file=.kairo/specs/{{feature_name}}/research.md
+spec_json=.kairo/specs/{{feature_name}}/spec.json
 
 # step
 
@@ -31,7 +31,7 @@ spec_json=.kiro/specs/{{feature_name}}/spec.json
 
 ## step2: 前提チェック
 
-- `.kiro/specs/{{feature_name}}/spec.json` を Read してフェーズ情報を確認する
+- `.kairo/specs/{{feature_name}}/spec.json` を Read してフェーズ情報を確認する
   - 存在しない場合：「先に `/kairo:spec-init` → `/kairo:spec-req` を実行してください」と言って終了する
   - `phases.requirements` が `"approved"` でない場合：
     - 「requirements.md が未承認です。`/kairo:spec-req {{feature_name}}` を先に実行してください」と表示する
@@ -43,9 +43,9 @@ spec_json=.kiro/specs/{{feature_name}}/spec.json
 
 ## step3: コンテキスト収集
 
-- `.kiro/specs/{{feature_name}}/requirements.md` を Read する
-- `.kiro/steering/structure.md` を存在する場合に Read する
-- `.kiro/steering/tech.md` を存在する場合に Read する
+- `.kairo/specs/{{feature_name}}/requirements.md` を Read する
+- `.kairo/steering/structure.md` を存在する場合に Read する
+- `.kairo/steering/tech.md` を存在する場合に Read する
 - 既存コードベースの関連実装を以下で調査する：
   - Glob: `src/**`, `app/**`, `lib/**`, `api/**`
   - Grep: requirements.md に登場するキーワードで既存実装を検索する
@@ -67,7 +67,7 @@ spec_json=.kiro/specs/{{feature_name}}/spec.json
 # Technical Design Document: {{feature_name}}
 
 **ステータス**: draft
-**要件参照**: .kiro/specs/{{feature_name}}/requirements.md
+**要件参照**: .kairo/specs/{{feature_name}}/requirements.md
 **作成日**: <現在の日付>
 
 ---
@@ -192,7 +192,7 @@ erDiagram
 ```
 ✅ design.md を生成しました
 
-.kiro/specs/{{feature_name}}/design.md
+.kairo/specs/{{feature_name}}/design.md
   - アーキテクチャ図: ✅
   - API 設計: <エンドポイント数> 件
   - DB 設計: <テーブル数> 件

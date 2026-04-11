@@ -14,11 +14,11 @@ argument-hint: "<feature-name> [-y]"
 
 feature_name={{feature_name}}
 auto_approve={{auto_approve}}
-spec_dir=.kiro/specs/{{feature_name}}
-requirements_file=.kiro/specs/{{feature_name}}/requirements.md
-design_file=.kiro/specs/{{feature_name}}/design.md
-tasks_file=.kiro/specs/{{feature_name}}/tasks.md
-spec_json=.kiro/specs/{{feature_name}}/spec.json
+spec_dir=.kairo/specs/{{feature_name}}
+requirements_file=.kairo/specs/{{feature_name}}/requirements.md
+design_file=.kairo/specs/{{feature_name}}/design.md
+tasks_file=.kairo/specs/{{feature_name}}/tasks.md
+spec_json=.kairo/specs/{{feature_name}}/spec.json
 
 # step
 
@@ -31,7 +31,7 @@ spec_json=.kiro/specs/{{feature_name}}/spec.json
 
 ## step2: 前提チェック
 
-- `.kiro/specs/{{feature_name}}/spec.json` を Read してフェーズ情報を確認する
+- `.kairo/specs/{{feature_name}}/spec.json` を Read してフェーズ情報を確認する
   - `phases.design` が `"approved"` でない場合：
     - 「design.md が未承認です。`/kairo:spec-design {{feature_name}}` を先に実行してください」と表示する
     - AskUserQuestion で確認する：
@@ -42,9 +42,9 @@ spec_json=.kiro/specs/{{feature_name}}/spec.json
 
 ## step3: コンテキスト収集
 
-- `.kiro/specs/{{feature_name}}/requirements.md` を Read する
-- `.kiro/specs/{{feature_name}}/design.md` を Read する
-- `.kiro/steering/structure.md` を存在する場合に Read する（実装パターン確認用）
+- `.kairo/specs/{{feature_name}}/requirements.md` を Read する
+- `.kairo/specs/{{feature_name}}/design.md` を Read する
+- `.kairo/steering/structure.md` を存在する場合に Read する（実装パターン確認用）
 - step4 を実行する
 
 ## step4: タスク分解
@@ -82,8 +82,8 @@ design.md から以下のルールで実装タスクを抽出・生成する：
 # Implementation Plan: {{feature_name}}
 
 **フィーチャー**: {{feature_description}}
-**要件参照**: .kiro/specs/{{feature_name}}/requirements.md
-**設計参照**: .kiro/specs/{{feature_name}}/design.md
+**要件参照**: .kairo/specs/{{feature_name}}/requirements.md
+**設計参照**: .kairo/specs/{{feature_name}}/design.md
 **作成日**: <現在の日付>
 
 ---
@@ -154,7 +154,7 @@ graph TD
 ```
 ✅ tasks.md を生成しました
 
-.kiro/specs/{{feature_name}}/tasks.md
+.kairo/specs/{{feature_name}}/tasks.md
   - タスク総数: <N> 件
   - P0 タスク: <N> 件（並列実行可能）
   - P1 タスク: <N> 件
