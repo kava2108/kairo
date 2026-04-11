@@ -29,7 +29,7 @@ coherence_json=graph/coherence.json
 
 以下のパターンで成果物ファイルを収集する（Glob を使用）：
 - `specs/**/*.md`
-- `.kairo/specs/**/*.md`
+- `.kiro/specs/**/*.md`
 
 収集したファイル一覧を内部変数に保持する。
 

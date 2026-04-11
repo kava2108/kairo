@@ -15,9 +15,9 @@ feature_name={{feature_name}}
 target_wave={{target_wave}}
 dry_run={{dry_run}}
 diff_mode={{diff_mode}}
-spec_dir=.kairo/specs/{{feature_name}}
-tasks_file=.kairo/specs/{{feature_name}}/tasks.md
-spec_json=.kairo/specs/{{feature_name}}/spec.json
+spec_dir=.kiro/specs/{{feature_name}}
+tasks_file=.kiro/specs/{{feature_name}}/tasks.md
+spec_json=.kiro/specs/{{feature_name}}/spec.json
 
 # step
 
@@ -39,7 +39,7 @@ spec_json=.kairo/specs/{{feature_name}}/spec.json
   - `gh` が未認証または未インストールの場合：
     - 「`gh` CLI が設定されていません。`gh auth login` を実行後に再試行してください」と表示する
     - `--dry-run` が有効な場合はスキップして続行する
-- `.kairo/specs/{{feature_name}}/spec.json` を Read してフェーズ情報を確認する
+- `.kiro/specs/{{feature_name}}/spec.json` を Read してフェーズ情報を確認する
   - `phases.tasks` が `"approved"` でない場合：
     - 「tasks.md が未承認です。先に `/kairo:spec-tasks {{feature_name}}` を実行してください」と表示する
     - AskUserQuestion で確認する：
@@ -50,9 +50,9 @@ spec_json=.kairo/specs/{{feature_name}}/spec.json
 
 ## step3: コンテキスト収集
 
-- `.kairo/specs/{{feature_name}}/tasks.md` を Read する
-- `.kairo/specs/{{feature_name}}/requirements.md` を Read する（AC 展開用）
-- `.kairo/specs/{{feature_name}}/design.md` を Read する（設計参照リンク用）
+- `.kiro/specs/{{feature_name}}/tasks.md` を Read する
+- `.kiro/specs/{{feature_name}}/requirements.md` を Read する（AC 展開用）
+- `.kiro/specs/{{feature_name}}/design.md` を Read する（設計参照リンク用）
 - step4 を実行する
 
 ## step4: 対象タスクの抽出
@@ -85,7 +85,7 @@ spec_json=.kairo/specs/{{feature_name}}/spec.json
 | REQ-001-AC-1 | WHEN ... THEN ... SHALL ... | Must |
 
 ## 関連設計
-- 設計書: `.kairo/specs/{{feature_name}}/design.md`
+- 設計書: `.kiro/specs/{{feature_name}}/design.md`
 - 関連タスク: tasks.md#<タスク番号>
 
 ## 実装ステップ
@@ -96,7 +96,7 @@ spec_json=.kairo/specs/{{feature_name}}/spec.json
 - 並列実行波形: <P0/P1/P2>
 
 ## kairo リンク
-- フィーチャー仕様: `.kairo/specs/{{feature_name}}/`
+- フィーチャー仕様: `.kiro/specs/{{feature_name}}/`
 - IMP 生成コマンド: `/kairo:imp_generate <issue-id>`
 ```
 
@@ -148,8 +148,8 @@ gh issue create \
 ## フィーチャー参照
 - フィーチャー: {{feature_name}}
 - タスク参照: tasks.md#<タスク番号>
-- 要件参照: .kairo/specs/{{feature_name}}/requirements.md
-- 設計参照: .kairo/specs/{{feature_name}}/design.md
+- 要件参照: .kiro/specs/{{feature_name}}/requirements.md
+- 設計参照: .kiro/specs/{{feature_name}}/design.md
 
 ## 受け入れ基準
 <requirements.md から AC を転写（AC-ID リンク付き）>
@@ -168,7 +168,7 @@ gh issue create \
 
 ## step9: spec.json の更新
 
-`.kairo/specs/{{feature_name}}/spec.json` の `generated_issues` を更新する：
+`.kiro/specs/{{feature_name}}/spec.json` の `generated_issues` を更新する：
 
 ```json
 {

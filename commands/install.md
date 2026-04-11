@@ -66,7 +66,7 @@ specs/
     mode: "claude-code-hooks"
   kiro:
     use_cc_sdd: "auto"
-    kiro_dir: ".kairo"
+    kiro_dir: ".kiro"
   ```
 - これにより `dispatch_baton` 等のバトン関数は早期リターンし、v1.0 互換動作を保証する
 
@@ -170,7 +170,7 @@ harness:
     approve_label: "approve"
 kiro:
   use_cc_sdd: "auto"
-  kiro_dir: ".kairo"
+  kiro_dir: ".kiro"
 codd:
   cli_path: null
 ```

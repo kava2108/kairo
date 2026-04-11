@@ -126,7 +126,7 @@ baton:
 ---
 ```
 
-- `feature_name` の推論: `.kairo/specs/` 以下のサブディレクトリで `tasks.md` に `{{issue_id}}` が含まれるものを feature とみなす。見つからない場合は `"unknown"` を設定して警告を出す
+- `feature_name` の推論: `.kiro/specs/` 以下のサブディレクトリで `tasks.md` に `{{issue_id}}` が含まれるものを feature とみなす。見つからない場合は `"unknown"` を設定して警告を出す
 - `git_head` の取得: Bash で `git rev-parse HEAD 2>/dev/null` を実行し、失敗した場合は `""` を設定する
 - `modules` の推論: IMP 本文の変更対象ファイル一覧から推論する
 
