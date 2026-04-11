@@ -199,7 +199,7 @@ harness:
 ## 成果物の場所
 
 ```
-.kiro/
+.kairo/
 ├── steering/              # プロジェクト規約・技術スタック
 │   ├── structure.md
 │   └── tech.md
