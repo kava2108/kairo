@@ -1,5 +1,5 @@
 ---
-description: IMP（仕様）と実装の乖離を5次元で検出・可視化します。drift スコア（0-100）を算出し、CRITICAL/WARNING/INFO で分類して乖離レポートを生成します。
+description: IMP（仕様）と実装の乖離を6次元で検出・可視化します。drift スコア（0-100）を算出し、CRITICAL/WARNING/INFO で分類して乖離レポートを生成します。
 allowed-tools: Read, Glob, Grep, Write, Edit, TodoWrite, Bash, AskUserQuestion
 argument-hint: "[issue-id] [--since <commit-ish>] [--threshold <0-100>]"
 ---
@@ -7,7 +7,7 @@ argument-hint: "[issue-id] [--since <commit-ish>] [--threshold <0-100>]"
 # kairo drift_check
 
 IMP（仕様）と実装の乖離を検出・スコア化します。
-5 次元の照合エンジンで乖離を分類し、drift スコアとして定量化します。
+6 次元の照合エンジンで乖離を分類し、drift スコアとして定量化します。
 冪等設計のため、実行するたびに drift-timeline.md に記録が蓄積されます。
 
 # context
@@ -130,12 +130,30 @@ patch-plan.md の「完了チェックリスト」を確認する。
 - **完了チェックリストの未チェック**: WARNING (score += 3)
 - **IMP 未記載のタスクが実装されている**: INFO (score += 1)
 
-## step9: drift スコアの算出と分類
+## step9: D6 — デザインシステム乖離検出
+
+**目的**: UI コンポーネントの実装が `design-system/MASTER.md` に準拠しているか確認する
+
+**前提チェック**:  
+`design-system/MASTER.md` が存在しない場合、この次元は **SKIP**（D6 スコア = 0）とする。
+
+**MASTER.md が存在する場合**:
+1. `design-system/MASTER.md` を Read する。
+2. 実装コード内のカラー値・フォント定義を Grep する:
+   - `var(--color-`, `#[0-9a-fA-F]{3,6}` パターン
+   - `font-family`, `font-size` プロパティ
+3. MASTER.md の定義と対照する:
+   - **MASTER.md 定義外のカラーコード**: WARNING (score += 3)
+   - **MASTER.md のタイポグラフィスケール外のフォントサイズ**: WARNING (score += 3)
+   - **Pre-delivery Checklist の必須項目（U01–U06）の未達成**: CRITICAL (score += 10)
+   - **Anti-patterns セクション記載の業界固有アンチパターンの存在**: WARNING (score += 3)
+
+## step10: drift スコアの算出と分類
 
 ```
 drift_score = min(Σ(各次元のスコア), 100)
 
-CRITICAL 件数: N件 × 10点
+CRITICAL 件数: N件 × 10点  （D1–D6 合算）
 WARNING  件数: N件 × 3点
 INFO     件数: N件 × 1点
 合計: N点
@@ -147,16 +165,16 @@ INFO     件数: N件 × 1点
 - 21-50:  ⚠️ Significant Drift（IMP を更新するか実装を修正する）
 - 51-100: ❌ Critical Drift（即時対応が必要）
 
-## step10: drift レポートの生成
+## step11: drift レポートの生成
 
 `specs/{{issue_id}}/drift-report.md` を生成する（上書き）。
 
 - テンプレートを Read する（以下の順で探索し、最初に見つかったものを使用する）：
   - `~/.claude/commands/kairo/templates/drift-report-template.md`
   - `.claude/commands/kairo/templates/drift-report-template.md`
-- テンプレートの変数を置換し、D1〜D5 の照合結果を埋めて Write する
+- テンプレートの変数を置換し、D1〜D6 の照合結果を埋めて Write する
 
-## step11: タイムラインの更新
+## step12: タイムラインの更新
 
 `specs/{{issue_id}}/drift-timeline.md` に今回の実行結果を追記する（既存の場合は追記のみ）。
 
@@ -165,7 +183,7 @@ INFO     件数: N件 × 1点
   - `.claude/commands/kairo/templates/drift-timeline-entry.md`
 - テンプレートの変数を置換し、`specs/{{issue_id}}/drift-timeline.md` に追記する（Edit ツールで末尾に追加）
 
-## step12: 閾値チェックと完了通知
+## step13: 閾値チェックと完了通知
 
 - drift スコアが threshold を超えている場合は警告を表示する
 
@@ -176,6 +194,7 @@ INFO     件数: N件 × 1点
   drift スコア: N/100 — [Aligned/Minor/Significant/Critical]
   (閾値: {{threshold}})
   CRITICAL: N件 / WARNING: N件 / INFO: N件
+  D6 デザイン乖離: N件 [SKIP の場合は「スキップ（MASTER.md なし）」]
 
   生成ファイル:
     specs/{{issue_id}}/drift-report.md

@@ -57,6 +57,17 @@ spec_json=.kiro/specs/{{feature_name}}/spec.json
   - 比較候補を 2〜3 案提示し、AskUserQuestion で技術選択を確認する
   - 調査結果を `research.md` に Write する（任意成果物）
 - Steering の tech.md に制約が記載されている場合は必ずそれに従う
+- step4.5 を実行する
+
+## step4.5: デザインシステム生成（--no-design-system 未指定時）
+
+- `$ARGUMENTS` に `--no-design-system` が含まれる場合はこのステップをスキップして step5 へ進む
+- `.kairo/config.json` の `integrations.design_system.enabled` を確認する（false ならスキップ）
+- `design-system/MASTER.md` が存在する場合：「既存の MASTER.md を参照します」と表示してスキップ
+- `design-system/MASTER.md` が存在しない場合：「デザインシステムを自動生成します」と表示して以下を実行する：
+  - Steering tech.md からデフォルトスタックを決定する（未記載時は `html-tailwind`）
+  - Claude ネイティブ推論で業界カテゴリ・5次元デザイン推論を実行する（`/kairo:design-system` の step2 相当処理）
+  - 推論結果を `design-system/MASTER.md` として Write する
 - step5 を実行する
 
 ## step5: design.md の生成
@@ -171,6 +182,26 @@ erDiagram
 | パフォーマンス | |
 | セキュリティ | |
 | 可用性 | |
+```
+
+## step5.5: Design System セクションの design.md への統合
+
+- `design-system/MASTER.md` が存在する場合のみ実行する
+- `design.md` の末尾に以下の `## Design System` セクションを追記（Edit）する：
+
+```markdown
+## Design System
+
+参照: [design-system/MASTER.md](../../design-system/MASTER.md)
+
+| 項目 | 内容 |
+|------|------|
+| **Primary Color** | `<MASTER.mdの値>` |
+| **Secondary Color** | `<MASTER.mdの値>` |
+| **フォントペア** | `<見出しフォント>` / `<本文フォント>` |
+| **スタック** | `<stack>` |
+
+> コンポーネント実装時は MASTER.md の内容に従うこと。逆規負ㅞが必要な場合は `design-system/pages/<page>.md` でオーバーライドする。
 ```
 
 ## step6: Human Gate（`-y` なし時）
