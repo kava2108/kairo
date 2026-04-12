@@ -9,13 +9,16 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 COMMANDS_SRC="$SCRIPT_DIR/commands"
 TEMPLATES_SRC="$SCRIPT_DIR/templates"
+SKILLS_SRC="$SCRIPT_DIR/.claude/skills"
 
 # インストール先を決定
 if [[ "${1:-}" == "--project" ]]; then
   DEST_DIR=".claude/commands/kairo"
+  SKILLS_DEST=".claude/skills"
   SCOPE="プロジェクト"
 else
   DEST_DIR="$HOME/.claude/commands/kairo"
+  SKILLS_DEST="$HOME/.claude/skills"
   SCOPE="グローバル"
 fi
 
@@ -41,6 +44,23 @@ for src in "$TEMPLATES_SRC"/*.md; do
   filename="$(basename "$src")"
   cp "$src" "$TEMPLATES_DEST/$filename"
   echo "  ✓ templates/$filename"
+done
+
+echo ""
+echo "スキルをインストール中..."
+for skill_dir in "$SKILLS_SRC"/*/; do
+  skill_name="$(basename "$skill_dir")"
+  dest_skill_dir="$SKILLS_DEST/$skill_name"
+  src_skill="$skill_dir/SKILL.md"
+  dest_skill="$dest_skill_dir/SKILL.md"
+  # コピー元とコピー先が同一ファイルの場合はスキップ
+  if [[ "$(realpath "$src_skill" 2>/dev/null)" == "$(realpath "$dest_skill" 2>/dev/null)" ]]; then
+    echo "  ✓ skills/$skill_name/SKILL.md (already in place)"
+    continue
+  fi
+  mkdir -p "$dest_skill_dir"
+  cp "$src_skill" "$dest_skill"
+  echo "  ✓ skills/$skill_name/SKILL.md"
 done
 
 echo ""
