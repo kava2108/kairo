@@ -12,6 +12,10 @@ kairo は Claude Code を使った **AI-TDD エンジン**です。
 |-------------|------|
 | [はじめてガイド](docs/getting-started.md) | インストールから最初の PR まで、コマンドの流れを体験するチュートリアル |
 | [コマンドリファレンス](docs/command-reference.md) | 全コマンドの構文・オプション・出力・使用例の詳細リファレンス |
+| [UI/UX デザインシステム統合仕様](docs/kairo-ui-ux-integration-spec-v1.1.md) | kairo の UI/UX 設計知識内部化方針・D6 Adversarial Review・design-system コマンド仕様 |
+| [VCKD フレームワーク仕様](docs/kairo-vckd-framework-spec-v2.0.md) | VSDD × CoDD × Kiro × kairo 統合アーキテクチャ・Phase Gate・Baton 仕様 |
+| [kairo × CoDD 統合仕様](docs/kairo-codd-integration-spec-v1.0.md) | CEG frontmatter スキーマ・drift_check・sync・rev の CoDD 統合設計 |
+| [kairo × Kiro 統合仕様](docs/kairo-kiro-integration-spec-v1.0.md) | Kiro との役割境界・ブリッジ仕様（tasks.md → Issue → IMP）設計 |
 
 ## 特徴
 

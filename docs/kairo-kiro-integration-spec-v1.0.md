@@ -1,8 +1,9 @@
-# tsumigi × Kiro（cc-sdd）統合仕様書 v1.0
+# kairo × Kiro（cc-sdd）統合仕様書 v1.0
 
-**対象バージョン**: tsumigi v3.0  
+**対象バージョン**: kairo v1.0（tsumigi v3.0 継承）  
 **参照実装**: [gotalab/cc-sdd](https://github.com/gotalab/cc-sdd)  
 **作成日**: 2026-04-04  
+**改訂日**: 2026-04-12  
 **ステータス**: Draft
 
 ---
@@ -15,7 +16,7 @@
 4. [ディレクトリ構造](#4-ディレクトリ構造)
 5. [上流工程仕様：Kiro フェーズ](#5-上流工程仕様kiro-フェーズ)
 6. [ブリッジ仕様：tasks.md → Issue → IMP](#6-ブリッジ仕様tasksmd--issue--imp)
-7. [下流工程仕様：tsumigi フェーズ](#7-下流工程仕様tsumigi-フェーズ)
+7. [下流工程仕様：kairo フェーズ](#7-下流工程仕様kairo-フェーズ)
 8. [CLI 拡張案](#8-cli-拡張案)
 9. [CoDD・VSDD との三層統合](#9-coddvsdd-との三層統合)
 10. [MVP 最小実装セット](#10-mvp-最小実装セット)
@@ -810,7 +811,7 @@ IMP.md への追加セクション:
 
 ---
 
-## 7. 下流工程仕様：tsumigi フェーズ
+## 7. 下流工程仕様：kairo フェーズ
 
 ### 7.1 既存コマンドへの Kiro コンテキスト注入
 

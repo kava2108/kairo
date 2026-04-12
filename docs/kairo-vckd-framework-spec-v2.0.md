@@ -1,8 +1,9 @@
-# VSDD × CoDD × Kiro × tsumigi 統合フレームワーク仕様書 v2.0
+# VSDD × CoDD × Kiro × kairo 統合フレームワーク仕様書 v2.0
 
 **フレームワーク名**: **VCKD**（Verified Coherence Kiro-Driven Development）  
-**対象バージョン**: tsumigi v3.0  
+**対象バージョン**: kairo v1.0（tsumigi v3.0 継承）  
 **作成日**: 2026-04-04  
+**改訂日**: 2026-04-12  
 **ステータス**: Draft  
 **v1.0 からの主要変更**:
 - ハーネスエンジニアリング原則に基づく **Label-Driven Baton Architecture** を追加（§3.3）
@@ -13,8 +14,8 @@
 - MVP に **Phase 0: Baton Infrastructure** を追加（§14）
 
 **参照仕様書**:
-- [tsumigi × CoDD 統合仕様書 v1.0](tsumigi-codd-integration-spec-v1.0.md)
-- [tsumigi × Kiro 統合仕様書 v1.0](tsumigi-kiro-integration-spec-v1.0.md)
+- [kairo × CoDD 統合仕様書 v1.0](kairo-codd-integration-spec-v1.0.md)
+- [kairo × Kiro 統合仕様書 v1.0](kairo-kiro-integration-spec-v1.0.md)
 - [ハーネスエンジニアリング記事](https://zenn.dev/aicon_kato/articles/harness-engineering-startup)
 
 ---
