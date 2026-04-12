@@ -91,9 +91,8 @@ specs/
       "enabled": true,
       "issue_prefix": "GH"
     },
-    "uupm": {
+    "design_system": {
       "enabled": true,
-      "skill_path": ".claude/skills/ui-ux-pro-max",
       "default_stack": "html-tailwind",
       "auto_design_system_on_spec_design": true,
       "persist_design_system": true
